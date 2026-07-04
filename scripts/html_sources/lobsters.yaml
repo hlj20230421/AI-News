@@ -1,0 +1,8 @@
+# Lobste.rs 首页列表（服务器渲染 HTML，适合作为 HTML 采集示例）
+entry_url: "https://lobste.rs/"
+list_selector: "ol.stories li.story"
+link_selector: "span.link a.u-url"
+title_selector: "span.link a.u-url"
+time_selector: "time[datetime]"
+max_items: 25
+timeout: 20

@@ -1,0 +1,32 @@
+---
+description: Superpowers 插件安装与在本仓库中的工作流期望（与 obra/superpowers 对齐）
+alwaysApply: true
+---
+
+# Superpowers（AI-News）
+
+本仓库建议配合 Cursor 官方插件 **[Superpowers](https://github.com/obra/superpowers)**（方法论 + 技能库：头脑风暴、写计划、TDD、系统化调试、代码评审等）。
+
+## 安装（本机一次性）
+
+在 **Cursor Agent** 对话（`Cmd/Ctrl + L`，非 Composer）中执行：
+
+```text
+/plugin-add superpowers
+```
+
+也可用：`/add-plugin superpowers`（以当前 Cursor 版本文档为准）。
+
+**验证**：新开会话后问「Do you have superpowers?」或「列出 Superpowers 技能」。
+
+**更新**：`/plugin-update superpowers`。**卸载**：`/plugin-remove superpowers`。
+
+## 在本项目中的期望
+
+- 若插件已安装：**优先遵循 Superpowers 自动触发的技能**。
+- 若未安装：仍按同一节奏工作，并与 `docs/开发指导.md`、`docs/开发进度.md` 的 Step 对齐：
+  - 较大功能或行为变更：先澄清需求与设计，再写可执行的分步计划，最后按计划实现。
+  - 实现侧：重要逻辑优先 **测试先行**（红–绿–重构）；**有证据再下结论**（复现、日志、单测）。
+  - 收尾：测试通过后再整理合并/PR/分支收尾选项。
+
+哲学与完整技能列表见：[Superpowers README](https://github.com/obra/superpowers#readme)。

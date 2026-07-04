@@ -1,0 +1,62 @@
+# ---------- Python ----------
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+.eggs/
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+.tox/
+.mypy_cache/
+.ruff_cache/
+.ipynb_checkpoints/
+
+# ---------- 虚拟环境 ----------
+.venv/
+venv/
+env/
+.python-version
+
+# ---------- 环境变量与机密 ----------
+.env
+.env.local
+.env.*.local
+*.pem
+*.key
+
+# ---------- 数据与日志 ----------
+data/
+logs/
+*.log
+*.db
+*.sqlite
+*.sqlite3
+dump.rdb
+
+# ---------- IDE ----------
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+
+# ---------- 前端 ----------
+frontend/node_modules/
+frontend/.next/
+frontend/out/
+frontend/build/
+frontend/.env*.local
+
+# ---------- Docker ----------
+.docker/
+docker-compose.override.yml
+
+# ---------- 其他 ----------
+.cache/
+tmp/

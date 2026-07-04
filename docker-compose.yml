@@ -1,0 +1,115 @@
+name: ai-news
+
+services:
+  postgres:
+    image: pgvector/pgvector:pg16
+    container_name: ai-news-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-ainews}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-ainews_pass_change_me}
+      POSTGRES_DB: ${POSTGRES_DB:-ainews}
+      TZ: ${TIMEZONE:-Asia/Shanghai}
+    ports:
+      - "5432:5432"
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-ainews} -d ${POSTGRES_DB:-ainews}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    container_name: ai-news-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+
+  backend:
+    build:
+      context: .
+      dockerfile: ops/Dockerfile.backend
+    container_name: ai-news-backend
+    restart: unless-stopped
+    env_file: .env
+    ports:
+      - "${APP_PORT:-8000}:8000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    volumes:
+      - ./backend:/app/backend
+      - ./scripts:/app/scripts
+    command: >
+      uvicorn app.main:app
+      --host 0.0.0.0
+      --port 8000
+      --reload
+
+  worker:
+    build:
+      context: .
+      dockerfile: ops/Dockerfile.backend
+    container_name: ai-news-worker
+    restart: unless-stopped
+    env_file: .env
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    volumes:
+      - ./backend:/app/backend
+    command: >
+      celery -A app.scheduler.celery_app worker
+      --loglevel=INFO
+      --concurrency=2
+
+  beat:
+    build:
+      context: .
+      dockerfile: ops/Dockerfile.backend
+    container_name: ai-news-beat
+    restart: unless-stopped
+    env_file: .env
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    volumes:
+      - ./backend:/app/backend
+    command: >
+      celery -A app.scheduler.celery_app beat
+      --loglevel=INFO
+
+  frontend:
+    image: node:20-alpine
+    container_name: ai-news-frontend
+    restart: unless-stopped
+    working_dir: /app/frontend
+    environment:
+      API_PROXY_TARGET: http://backend:8000
+    volumes:
+      - ./:/app
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+    command: >
+      sh -lc "npm install && npm run dev"
+
+volumes:
+  pg_data:
+  redis_data:

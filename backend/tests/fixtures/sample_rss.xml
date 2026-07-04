@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0">
+  <channel>
+    <title>Sample AI Blog</title>
+    <link>https://example.com</link>
+    <description>Test feed</description>
+    <language>en</language>
+    <item>
+      <title>OpenAI releases new model</title>
+      <link>https://example.com/post/1</link>
+      <description>OpenAI announced a new model focused on reasoning.</description>
+      <pubDate>Mon, 27 Apr 2026 10:00:00 +0000</pubDate>
+      <author>alice@example.com</author>
+      <guid>https://example.com/post/1</guid>
+    </item>
+    <item>
+      <title>New Agent framework benchmarks</title>
+      <link>https://example.com/post/2</link>
+      <description>Benchmark study comparing agent frameworks.</description>
+      <pubDate>Mon, 27 Apr 2026 11:00:00 +0000</pubDate>
+      <guid>https://example.com/post/2</guid>
+    </item>
+    <item>
+      <title>Empty link entry</title>
+      <link></link>
+      <description>Should be filtered out.</description>
+    </item>
+  </channel>
+</rss>
