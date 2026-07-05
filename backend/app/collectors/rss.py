@@ -19,6 +19,8 @@ from app.collectors.base import BaseCollector, RawArticle
 from app.utils.logging import logger
 
 DEFAULT_TIMEOUT = 15.0
+_FEED_FETCH_RETRIES = 3
+_FEED_FETCH_BACKOFF_SEC = (0.0, 1.0, 2.0)
 DEFAULT_USER_AGENT = (
     "Mozilla/5.0 (compatible; AI-News-Bot/0.1; +https://example.com)"
 )

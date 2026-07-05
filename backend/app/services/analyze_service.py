@@ -10,6 +10,7 @@ from app.analyzers.embedding_client import EmbeddingClient
 from app.config import settings
 from app.db import SessionLocal
 from app.db.models import Analysis, Article
+from app.utils.logging import logger
 def _persist_embedding(session, analysis_id: int, vector: list[float]) -> None:
     session.execute(
         text("UPDATE analyses SET embedding = CAST(:vec AS vector) WHERE id = :id"),
@@ -28,12 +29,21 @@ def analyze_article_by_id(article_id: int) -> int | None:
         if article.analysis is not None:
             return article.analysis.id
         try:
-            analysis, embedding = analyzer.analyze_article(article)
+            analysis = analyzer.analyze_article(article)
         except Exception:
+            logger.exception("分析文章失败 article_id={}", article_id)
             return None
         session.add(analysis)
         session.commit()
         session.refresh(analysis)
+
+        try:
+            embed_text = f"{article.title}\n{analysis.summary}"
+            embedding = EmbeddingClient().embed(embed_text).vector
+        except Exception:
+            logger.debug("文章 {} embedding 跳过（未配置或调用失败）", article_id)
+            embedding = None
+
         if embedding:
             try:
                 _persist_embedding(session, analysis.id, embedding)

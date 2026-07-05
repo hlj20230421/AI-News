@@ -71,8 +71,9 @@ DEFAULT_SOURCES: tuple[SeedSource, ...] = (
     ),
     SeedSource(
         name="机器之心",
-        url="https://www.jiqizhixin.com/rss",
-        description="中文 AI 产业与技术资讯",
+        url="https://www.jiqizhixin.com/articles",
+        type="jiqizhixin",
+        description="中文 AI 产业与技术资讯（GraphQL，官方 RSS 已下线）",
     ),
     SeedSource(
         name="量子位",

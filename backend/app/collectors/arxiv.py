@@ -25,13 +25,13 @@ class ArxivCollector(BaseCollector):
 
     def __init__(
         self,
+        source_url: str = DEFAULT_BASE_URL,
         *,
-        base_url: str = DEFAULT_BASE_URL,
         categories: tuple[str, ...] = DEFAULT_CATEGORIES,
         max_items: int = 30,
         timeout: float = DEFAULT_TIMEOUT,
     ) -> None:
-        self.base_url = base_url
+        self.base_url = source_url or DEFAULT_BASE_URL
         self.categories = categories
         self.max_items = max_items
         self.timeout = timeout

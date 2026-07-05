@@ -4,7 +4,8 @@ from __future__ import annotations
 
 from datetime import UTC, datetime
 
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Query
+from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from app.api.schemas import UserActionIn, UserActionOut
@@ -14,6 +15,21 @@ from app.db.models import Article, UserAction
 router = APIRouter(prefix="/user-actions", tags=["user-actions"])
 
 ALLOWED_ACTIONS = {"bookmark", "later", "dismiss", "open", "note", "hide"}
+
+
+@router.get("", response_model=list[UserActionOut])
+def list_user_actions(
+    article_id: int | None = Query(default=None),
+    action: str | None = Query(default=None),
+    limit: int = Query(default=500, ge=1, le=2000),
+    db: Session = Depends(get_db),
+) -> list[UserAction]:
+    stmt = select(UserAction).order_by(UserAction.created_at.desc()).limit(limit)
+    if article_id is not None:
+        stmt = stmt.where(UserAction.article_id == article_id)
+    if action is not None:
+        stmt = stmt.where(UserAction.action == action.strip().lower())
+    return list(db.execute(stmt).scalars())
 
 
 @router.post("", response_model=UserActionOut)

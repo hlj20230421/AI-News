@@ -7,6 +7,7 @@ from app.collectors.arxiv import ArxivCollector
 from app.collectors.base import BaseCollector, RawArticle
 from app.collectors.hackernews import HackerNewsCollector
 from app.collectors.html import HTMLCollector
+from app.collectors.jiqizhixin import JiqizhixinCollector
 from app.collectors.rss import RSSCollector
 
 COLLECTOR_TYPES: dict[str, type[BaseCollector]] = {
@@ -14,6 +15,7 @@ COLLECTOR_TYPES: dict[str, type[BaseCollector]] = {
     "hackernews": HackerNewsCollector,
     "arxiv": ArxivCollector,
     "html": HTMLCollector,
+    "jiqizhixin": JiqizhixinCollector,
 }
 
 __all__ = [
@@ -23,5 +25,6 @@ __all__ = [
     "HackerNewsCollector",
     "ArxivCollector",
     "HTMLCollector",
+    "JiqizhixinCollector",
     "COLLECTOR_TYPES",
 ]

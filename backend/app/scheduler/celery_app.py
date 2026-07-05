@@ -61,4 +61,9 @@ celery_app.conf.beat_schedule = {
         "task": "app.scheduler.tasks.send_instant_digest",
         "schedule": _crontab_from_str(settings.instant_push_cron),
     },
+    "analyze-pending": {
+        "task": "app.scheduler.tasks.analyze_pending",
+        "schedule": crontab(minute="*/10"),
+        "kwargs": {"limit": 20},
+    },
 }

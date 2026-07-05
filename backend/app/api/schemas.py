@@ -18,6 +18,8 @@ class SourceCreate(BaseModel):
 
 class SourceUpdate(BaseModel):
     name: str | None = None
+    url: str | None = Field(default=None, min_length=1, max_length=1024)
+    type: str | None = Field(default=None, max_length=32)
     description: str | None = None
     enabled: bool | None = None
 
